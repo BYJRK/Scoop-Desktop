@@ -1,4 +1,5 @@
-﻿using Scoop_Desktop.Models;
+﻿using ModernWpf.Controls;
+using Scoop_Desktop.Models;
 using Scoop_Desktop.Pages;
 using System;
 using System.Collections.ObjectModel;
@@ -44,6 +45,10 @@ namespace Scoop_Desktop
                         throw new NotImplementedException();
                 }
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

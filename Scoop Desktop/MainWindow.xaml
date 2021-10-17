@@ -7,8 +7,10 @@
         xmlns:ui="http://schemas.modernwpf.com/2019"
         Title="Scoop GUI"
         Width="800"
-        Height="450"
+        Height="550"
         ui:WindowHelper.UseModernWindowStyle="True"
+        Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen"
         mc:Ignorable="d">
     <Grid>
         <ui:NavigationView Name="NavView"

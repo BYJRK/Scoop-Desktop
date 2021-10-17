@@ -57,7 +57,7 @@ namespace Scoop_Desktop.Pages
 
         private void ListViewItem_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show($"Are you sure you want to uninstall {((sender as ListViewItem).Content as AppInfo).Name}?");
+            //MessageBox.Show($"Are you sure you want to uninstall {((sender as ListViewItem).Content as AppInfo).Name}?");
         }
     }
 }

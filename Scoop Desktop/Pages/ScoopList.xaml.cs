@@ -6,10 +6,11 @@ using System.Windows;
 using System.Windows.Controls;
 using ModernWpf;
 using System.Threading.Tasks;
+using ModernWpf.Controls;
 
 namespace Scoop_Desktop.Pages
 {
-    public partial class ScoopList : Page
+    public partial class ScoopList : System.Windows.Controls.Page
     {
         public ScoopList()
         {
@@ -30,16 +31,41 @@ namespace Scoop_Desktop.Pages
             }
             else if (header == "Info")
             {
-                MessageBox.Show(await CmdHelper.RunPowershellCommandAsync($"scoop info {app.Name}"));
+                var info = await CmdHelper.RunPowershellCommandAsync($"scoop info {app.Name}");
+                var dialog = new ContentDialog
+                {
+                    Title = app.Name,
+                    Content = info,
+                    CloseButtonText = "Close",
+                    DefaultButton = ContentDialogButton.Close
+                };
+
+                await dialog.ShowAsync();
+
             }
             else if (header == "Uninstall")
             {
-                var result = MessageBox.Show($"Are you sure you want to uninstall {app.Name}?", null, MessageBoxButton.OKCancel);
-                if (result == MessageBoxResult.OK)
+                var result = await new ContentDialog
+                {
+                    Title = "Uninstall",
+                    Content = $"Are you sure you want to uninstall {app.Name}?",
+                    PrimaryButtonText = "OK",
+                    CloseButtonText = "Cancel",
+                    DefaultButton = ContentDialogButton.Primary
+                }.ShowAsync();
+                if (result == ContentDialogResult.Primary)
                 {
                     MyProgressRing.IsActive = true;
                     await CmdHelper.RunPowershellCommandAsync($"scoop uninstall {app.Name}");
-                    MessageBox.Show($"{app.Name} has been uninstalled.");
+                    MyProgressRing.IsActive = false;
+                    await new ContentDialog
+                    {
+                        Title = "Uninstall",
+                        Content = $"{app.Name} has been uninstalled.",
+                        CloseButtonText = "Close",
+                        DefaultButton = ContentDialogButton.Close
+                    }.ShowAsync();
+                    MyProgressRing.IsActive = true;
                     await RefreshAppList();
                     MyProgressRing.IsActive = false;
                 }
@@ -62,6 +88,18 @@ namespace Scoop_Desktop.Pages
             {
                 AppList.Add(new AppInfo(line));
             }
+        }
+
+        private async void Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            MyProgressRing.IsActive = true;
+            await RefreshAppList();
+            MyProgressRing.IsActive = false;
+        }
+
+        private void Install_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

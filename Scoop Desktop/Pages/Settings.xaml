@@ -32,25 +32,25 @@
     </Page.Resources>
 
     <StackPanel Margin="20,10">
-        <TextBlock Style="{StaticResource Header}">设置</TextBlock>
-        <TextBlock Style="{StaticResource Subheader}">主题</TextBlock>
+        <TextBlock Style="{StaticResource Header}">Settings</TextBlock>
+        <TextBlock Style="{StaticResource Subheader}">Theme</TextBlock>
         <ui:ToggleSwitch IsEnabled="False"
                          Toggled="ToggleSwitch_Toggled"
-                         OnContent="夜间模式"
-                         OffContent="日间模式">
-            主题样式
+                         OnContent="Dark"
+                         OffContent="Light">
+            Theme
         </ui:ToggleSwitch>
-        <TextBlock Style="{StaticResource Subheader}">配置</TextBlock>
+        <TextBlock Style="{StaticResource Subheader}">Scoop Configuration</TextBlock>
         <ui:ToggleSwitch Name="useAria2Toggle"
-                         OnContent="启用"
-                         OffContent="关闭"
+                         OnContent="On"
+                         OffContent="Off"
                          IsEnabled="False">
-            使用 Aria2 多线程下载
+            Use Aria2
         </ui:ToggleSwitch>
         <StackPanel Margin="0,15,0,0" Orientation="Horizontal">
-            <TextBlock Style="{StaticResource Label}">代理</TextBlock>
+            <TextBlock Style="{StaticResource Label}">Proxy</TextBlock>
             <TextBox Name="ProxyTextBox" Width="180" VerticalContentAlignment="Center" />
-            <Button Margin="10,0,0,0" Click="SetProxy_Click">设定</Button>
+            <Button Margin="10,0,0,0" Click="SetProxy_Click" Content="Apply" />
         </StackPanel>
     </StackPanel>
 </Page>

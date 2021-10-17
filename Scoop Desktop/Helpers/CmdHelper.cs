@@ -19,7 +19,7 @@ namespace Scoop_Desktop
             p.StartInfo.Arguments = arguments;
             p.StartInfo.CreateNoWindow = true;
             p.Start();
-            return p.StandardOutput.ReadToEnd();
+            return p.StandardOutput.ReadToEnd().Trim('\r', '\n');
         }
 
         public static async Task<string> RunPowershellCommandAsync(string arguments)
@@ -32,7 +32,7 @@ namespace Scoop_Desktop
                 p.StartInfo.Arguments = arguments;
                 p.StartInfo.CreateNoWindow = true;
                 p.Start();
-                return p.StandardOutput.ReadToEnd();
+                return p.StandardOutput.ReadToEnd().Trim('\r', '\n');
             });
         }
 

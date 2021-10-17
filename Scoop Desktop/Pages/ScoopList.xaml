@@ -11,11 +11,12 @@
       d:Background="White"
       Loaded="Page_Loaded"
       mc:Ignorable="d">
-    <Border Grid.Row="1"
-            Margin="5"
-            BorderThickness="1"
-            BorderBrush="Gray">
-        <Grid>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Border Margin="5" BorderThickness="1" BorderBrush="Gray">
             <ListView Name="MyListView">
                 <ListView.ContextMenu>
                     <ContextMenu>
@@ -32,11 +33,18 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-
-            <ui:ProgressRing Name="MyProgressRing"
-                             Width="50"
-                             Height="50"
-                             IsActive="True" />
-        </Grid>
-    </Border>
+        </Border>
+        <ui:ProgressRing Name="MyProgressRing"
+                         Width="50"
+                         Height="50"
+                         IsActive="True" />
+        <ui:CommandBar Grid.Row="1">
+            <ui:AppBarButton Label="Refresh" Icon="Refresh" Click="Refresh_Click" />
+            <ui:AppBarSeparator />
+            <ui:AppBarButton Label="Install"
+                             Icon="Download"
+                             Click="Install_Click"
+                             IsEnabled="False" />
+        </ui:CommandBar>
+    </Grid>
 </Page>

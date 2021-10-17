@@ -62,9 +62,9 @@ namespace Scoop_Desktop.Pages
             this.Visibility = Visibility.Visible;
         }
 
-        private void SetProxy_Click(object sender, RoutedEventArgs e)
+        private async void SetProxy_Click(object sender, RoutedEventArgs e)
         {
-            var proxy = ProxyTextBox.Text; 
+            var proxy = ProxyTextBox.Text;
 
             if (string.IsNullOrEmpty(proxy))
             {
@@ -72,7 +72,13 @@ namespace Scoop_Desktop.Pages
             }
             else if (!Regex.IsMatch(proxy, @"(?:\d{1,3}(?(?=:)|\.)){4}:\d{1,5}"))
             {
-                MessageBox.Show("Proxy is invalid.");
+                await new ModernWpf.Controls.ContentDialog
+                {
+                    Title = "Proxy",
+                    Content = "Invalid proxy value.",
+                    CloseButtonText = "Close",
+                    DefaultButton = ModernWpf.Controls.ContentDialogButton.Close
+                }.ShowAsync();
             }
             else
             {
