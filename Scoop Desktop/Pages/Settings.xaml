@@ -34,17 +34,11 @@
     <StackPanel Margin="20,10">
         <TextBlock Style="{StaticResource Header}">Settings</TextBlock>
         <TextBlock Style="{StaticResource Subheader}">Theme</TextBlock>
-        <ui:ToggleSwitch IsEnabled="False"
-                         Toggled="ToggleSwitch_Toggled"
-                         OnContent="Dark"
-                         OffContent="Light">
+        <ui:ToggleSwitch Toggled="ToggleSwitch_Toggled" OnContent="Dark" OffContent="Light">
             Theme
         </ui:ToggleSwitch>
         <TextBlock Style="{StaticResource Subheader}">Scoop Configuration</TextBlock>
-        <ui:ToggleSwitch Name="useAria2Toggle"
-                         OnContent="On"
-                         OffContent="Off"
-                         IsEnabled="False">
+        <ui:ToggleSwitch Name="useAria2Toggle" OnContent="On" OffContent="Off">
             Use Aria2
         </ui:ToggleSwitch>
         <StackPanel Margin="0,15,0,0" Orientation="Horizontal">
