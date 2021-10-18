@@ -25,6 +25,16 @@ namespace Scoop_Desktop.Pages
             InitializeComponent();
 
             BucketAppListView.ItemsSource = appList;
+
+            var view = CollectionViewSource.GetDefaultView(BucketAppListView.ItemsSource);
+            view.Filter = (item) =>
+            {
+                var searchText = SearchBox.Text;
+
+                if (string.IsNullOrEmpty(searchText))
+                    return true;
+                return (item as string).Contains(searchText);
+            };
         }
 
         ObservableCollection<string> appList = new ObservableCollection<string>();
@@ -53,6 +63,35 @@ namespace Scoop_Desktop.Pages
             foreach (var file in Directory.GetFiles(apps))
             {
                 appList.Add(Path.GetFileNameWithoutExtension(file));
+            }
+        }
+
+        private void AutoSuggestBox_TextChanged(ModernWpf.Controls.AutoSuggestBox sender, ModernWpf.Controls.AutoSuggestBoxTextChangedEventArgs args)
+        {
+            CollectionViewSource.GetDefaultView(BucketAppListView.ItemsSource).Refresh();
+        }
+
+        private async void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var item = sender as MenuItem;
+            var header = item?.Header.ToString();
+            var appName = BucketAppListView.SelectedItem.ToString();
+            switch (header)
+            {
+                case "Info":
+                    MyProgressRing.IsActive = true;
+                    var info = await CmdHelper.RunPowershellCommandAsync($"scoop info {appName}");
+                    MyProgressRing.IsActive = false;
+                    await new ModernWpf.Controls.ContentDialog
+                    {
+                        Title = appName,
+                        Content = info,
+                        CloseButtonText = "Close",
+                        DefaultButton = ModernWpf.Controls.ContentDialogButton.Close
+                    }.ShowAsync();
+                    break;
+                default:
+                    throw new NotImplementedException();
             }
         }
     }

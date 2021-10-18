@@ -1,14 +1,15 @@
 ﻿<Page x:Class="Scoop_Desktop.Pages.ScoopBucket"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Scoop_Desktop.Pages"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:ui="http://schemas.modernwpf.com/2019"
       Title="ScoopBucket"
       d:DesignHeight="450"
       d:DesignWidth="800"
-      Loaded="Page_Loaded"
       Background="White"
+      Loaded="Page_Loaded"
       mc:Ignorable="d">
 
     <Grid Margin="5">
@@ -18,10 +19,31 @@
         </Grid.RowDefinitions>
         <Grid Grid.ColumnSpan="2" Margin="0,0,0,5">
             <Button HorizontalAlignment="Right">Refresh</Button>
-            <ComboBox Name="BucketListComboBox" Width="150" SelectionChanged="BucketListComboBox_SelectionChanged" />
+            <StackPanel Orientation="Horizontal">
+                <ComboBox Name="BucketListComboBox" Width="150" SelectionChanged="BucketListComboBox_SelectionChanged" />
+                <ui:AutoSuggestBox Name="SearchBox"
+                                   Width="250"
+                                   Margin="5,0,0,0"
+                                   PlaceholderText="Search..."
+                                   QueryIcon="Find"
+                                   TextChanged="AutoSuggestBox_TextChanged" />
+            </StackPanel>
         </Grid>
-        <Border Grid.Row="1" BorderThickness="1" BorderBrush="gray">
-            <ListView Name="BucketAppListView" Grid.Row="1" />
+        <Border Grid.Row="1" BorderBrush="gray" BorderThickness="1">
+            <Grid>
+                <ListView Name="BucketAppListView" Grid.Row="1">
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Click="MenuItem_Click" Header="Info" />
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                </ListView>
+
+                <ui:ProgressRing Name="MyProgressRing"
+                                 Width="50"
+                                 Height="50"
+                                 IsActive="False" />
+            </Grid>
         </Border>
     </Grid>
 </Page>
