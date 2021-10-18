@@ -80,15 +80,7 @@ namespace Scoop_Desktop.Pages
             {
                 case "Info":
                     MyProgressRing.IsActive = true;
-                    var info = await CmdHelper.RunPowershellCommandAsync($"scoop info {appName}");
-                    MyProgressRing.IsActive = false;
-                    await new ModernWpf.Controls.ContentDialog
-                    {
-                        Title = appName,
-                        Content = info,
-                        CloseButtonText = "Close",
-                        DefaultButton = ModernWpf.Controls.ContentDialogButton.Close
-                    }.ShowAsync();
+                    await ScoopHelper.ShowAppInfoAsync(appName, () => MyProgressRing.IsActive = false);
                     break;
                 default:
                     throw new NotImplementedException();

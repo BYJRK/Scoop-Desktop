@@ -24,11 +24,11 @@
                         <GridViewColumn Width="450" Header="Version" DisplayMemberBinding="{Binding Version}" />
                     </GridView>
                 </ListView.View>
-                <!--<ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <EventSetter Event="MouseRightButtonUp" Handler="ListViewItem_MouseRightButtonUp" />
-                    </Style>
-                </ListView.ItemContainerStyle>-->
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Update" Click="MenuItem_Click"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
             </ListView>
             <ui:ProgressRing Name="MyProgressRing"
                              Width="50"

@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using Scoop_Desktop.Models;
-using System.Windows.Input;
+using System.Threading.Tasks;
 
 namespace Scoop_Desktop.Pages
 {
@@ -23,33 +23,23 @@ namespace Scoop_Desktop.Pages
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            await RefreshAppStatus();
+        }
+
+        private async Task RefreshAppStatus()
+        {
             MyProgressRing.IsActive = true;
 
-            // 如果距离上次更新的日期过去超过 15 分钟，则重新更新
-            //if (DateTime.Now - lastUpdate > new TimeSpan(0, 15, 0))
-            //{
-            //    await CmdHelper.RunPowershellCommandAsync("scoop update");
-            //    lastUpdate = DateTime.Now;
-            //}
-
-            var res = await CmdHelper.RunPowershellCommandAsync("scoop status");
+            var res = await ScoopHelper.GetAppStatusAsync();
             if (!res.Contains("Updates are available for:"))
             {
                 // 所有应用都是最新的
                 return;
             }
 
-            var lines = res
-                .ToTrimmedLines()
-                .SkipWhile(line => !line.StartsWith("Updates are available for"))
-                .Skip(1)
-                .SkipLast(1);
-
             AppList.Clear();
-            foreach (var line in lines)
+            foreach (var line in res.ToTrimmedLines().Where(line => line.Contains("->")))
             {
-                if (!line.Contains("->"))
-                    continue;
                 var split = line.Split(": ");
                 AppList.Add(new AppInfo { Name = split[0], Version = split[1] });
             }
@@ -57,9 +47,26 @@ namespace Scoop_Desktop.Pages
             MyProgressRing.IsActive = false;
         }
 
-        private void ListViewItem_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        private async void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show($"Are you sure you want to uninstall {((sender as ListViewItem).Content as AppInfo).Name}?");
+            var item = sender as MenuItem;
+            var app = MyListView.SelectedItem as AppInfo;
+            if (app is null)
+                return;
+            switch (item.Header.ToString())
+            {
+                case "Update":
+                    var option = await ContentDialogHelper.YesNo($"Are you sure you want to update {app.Name}?\n({app.Version})", $"Update");
+                    if (option == ModernWpf.Controls.ContentDialogResult.Primary)
+                    {
+                        MyProgressRing.IsActive = true;
+                        var res = await ScoopHelper.UpdateAppAsync(app.Name);
+                        MyProgressRing.IsActive = false;
+                        await ContentDialogHelper.Close(res ? "Update successfully." : "Update failed.");
+                        await RefreshAppStatus();
+                    }
+                    break;
+            }
         }
     }
 }

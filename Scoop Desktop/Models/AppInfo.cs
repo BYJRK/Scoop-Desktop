@@ -16,7 +16,7 @@ namespace Scoop_Desktop.Models
             var split = scoopInfo.Split();
             Name = split[0];
             Version = split[1];
-            Bucket = split[2][1..^1];
+            Bucket = split[2].Trim('[', ']');
         }
 
         public AppInfo()

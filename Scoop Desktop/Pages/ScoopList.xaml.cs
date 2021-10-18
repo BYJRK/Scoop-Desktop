@@ -31,40 +31,18 @@ namespace Scoop_Desktop.Pages
             }
             else if (header == "Info")
             {
-                var info = await CmdHelper.RunPowershellCommandAsync($"scoop info {app.Name}");
-                var dialog = new ContentDialog
-                {
-                    Title = app.Name,
-                    Content = info,
-                    CloseButtonText = "Close",
-                    DefaultButton = ContentDialogButton.Close
-                };
-
-                await dialog.ShowAsync();
-
+                MyProgressRing.IsActive = true;
+                await ScoopHelper.ShowAppInfoAsync(app.Name, () => MyProgressRing.IsActive = false);
             }
             else if (header == "Uninstall")
             {
-                var result = await new ContentDialog
-                {
-                    Title = "Uninstall",
-                    Content = $"Are you sure you want to uninstall {app.Name}?",
-                    PrimaryButtonText = "OK",
-                    CloseButtonText = "Cancel",
-                    DefaultButton = ContentDialogButton.Primary
-                }.ShowAsync();
+                var result = await ContentDialogHelper.YesNo($"Are you sure you want to uninstall {app.Name}?", "Uninstall");
                 if (result == ContentDialogResult.Primary)
                 {
                     MyProgressRing.IsActive = true;
                     await CmdHelper.RunPowershellCommandAsync($"scoop uninstall {app.Name}");
                     MyProgressRing.IsActive = false;
-                    await new ContentDialog
-                    {
-                        Title = "Uninstall",
-                        Content = $"{app.Name} has been uninstalled.",
-                        CloseButtonText = "Close",
-                        DefaultButton = ContentDialogButton.Close
-                    }.ShowAsync();
+                    await ContentDialogHelper.Close($"{app.Name} has been uninstalled.");
                     MyProgressRing.IsActive = true;
                     await RefreshAppList();
                     MyProgressRing.IsActive = false;
@@ -81,8 +59,8 @@ namespace Scoop_Desktop.Pages
 
         private async Task RefreshAppList()
         {
-            var res = await CmdHelper.RunPowershellCommandAsync("scoop list");
-            var lines = res.ToTrimmedLines();
+            var lines = await ScoopHelper.GetAppListAsync();
+
             AppList.Clear();
             foreach (var line in lines.Skip(2))
             {

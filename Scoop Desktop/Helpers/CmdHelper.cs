@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
 namespace Scoop_Desktop
 {
-    public static class CmdHelper
+    static class CmdHelper
     {
         public static string RunPowershellCommand(string arguments)
         {
-            var p = new Process();
+            using var p = new Process();
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.FileName = "powershell.exe";
             p.StartInfo.Arguments = arguments;
@@ -26,13 +22,30 @@ namespace Scoop_Desktop
         {
             return await Task.Run(() =>
             {
-                var p = new Process();
+                using var p = new Process();
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.FileName = "powershell.exe";
                 p.StartInfo.Arguments = arguments;
                 p.StartInfo.CreateNoWindow = true;
                 p.Start();
                 return p.StandardOutput.ReadToEnd().Trim('\r', '\n');
+            });
+        }
+
+        public static async Task RunPowershellCommandAsync(string arguments, DataReceivedEventHandler callback)
+        {
+            await Task.Run(() =>
+            {
+                using var p = new Process();
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.FileName = "powershell.exe";
+                p.StartInfo.Arguments = arguments;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.CreateNoWindow = true;
+                p.OutputDataReceived += callback;
+                p.Start();
+                p.BeginOutputReadLine();
+                p.WaitForExit();
             });
         }
 
@@ -47,5 +60,6 @@ namespace Scoop_Desktop
                 .Select(line => line.Trim())
                 .ToArray();
         }
+
     }
 }
