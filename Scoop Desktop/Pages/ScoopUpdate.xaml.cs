@@ -48,6 +48,8 @@ namespace Scoop_Desktop.Pages
             AppList.Clear();
             foreach (var line in lines)
             {
+                if (!line.Contains("->"))
+                    continue;
                 var split = line.Split(": ");
                 AppList.Add(new AppInfo { Name = split[0], Version = split[1] });
             }
