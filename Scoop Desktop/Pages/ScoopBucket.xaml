@@ -6,9 +6,9 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:ui="http://schemas.modernwpf.com/2019"
       Title="ScoopBucket"
+      d:Background="White"
       d:DesignHeight="450"
       d:DesignWidth="800"
-      d:Background="White"
       Loaded="Page_Loaded"
       mc:Ignorable="d">
 
@@ -35,6 +35,7 @@
                     <ListView.ContextMenu>
                         <ContextMenu>
                             <MenuItem Click="MenuItem_Click" Header="Info" />
+                            <MenuItem Click="MenuItem_Click" Header="Install" />
                         </ContextMenu>
                     </ListView.ContextMenu>
                 </ListView>

@@ -6,6 +6,7 @@
     <RootNamespace>Scoop_Desktop</RootNamespace>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Icons\Spoon.ico</ApplicationIcon>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>    
   </PropertyGroup>
 
   <ItemGroup>

@@ -82,6 +82,12 @@ namespace Scoop_Desktop.Pages
                     MyProgressRing.IsActive = true;
                     await ScoopHelper.ShowAppInfoAsync(appName, () => MyProgressRing.IsActive = false);
                     break;
+                case "Install":
+                    MyProgressRing.IsActive = true;
+                    await ScoopHelper.InstallAppAsync(appName);
+                    MyProgressRing.IsActive = false;
+                    await ContentDialogHelper.Close($"{appName} was installed successfully.");
+                    break;
                 default:
                     throw new NotImplementedException();
             }

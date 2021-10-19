@@ -62,8 +62,19 @@ namespace Scoop_Desktop.Pages
                         MyProgressRing.IsActive = true;
                         var res = await ScoopHelper.UpdateAppAsync(app.Name);
                         MyProgressRing.IsActive = false;
-                        await ContentDialogHelper.Close(res ? "Update successfully." : "Update failed.");
-                        await RefreshAppStatus();
+                        if (res.Contains("was installed successfully"))
+                        {
+                            await ContentDialogHelper.Close($"{app.Name} was updated successfully.");
+                            await RefreshAppStatus();
+                        }
+                        else if (res.Contains("ERROR Application is still running"))
+                        {
+                            await ContentDialogHelper.Close("Update failed. Application is still running.");
+                        }
+                        else
+                        {
+                            await ContentDialogHelper.Close("Update failed.\n" + res);
+                        }
                     }
                     break;
             }

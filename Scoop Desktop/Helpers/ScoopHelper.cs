@@ -18,7 +18,7 @@ namespace Scoop_Desktop
         public static async Task ShowAppInfoAsync(string appName, Action callbackBeforeDialog = null)
         {
             var info = await CmdHelper.RunPowershellCommandAsync($"scoop info {appName}");
-            
+
             if (callbackBeforeDialog != null)
                 callbackBeforeDialog.Invoke();
 
@@ -36,12 +36,19 @@ namespace Scoop_Desktop
             return await CmdHelper.RunPowershellCommandAsync("scoop status");
         }
 
-        public static async Task<bool> UpdateAppAsync(string appName)
+        public static async Task<string> UpdateAppAsync(string appName)
         {
-            var res = await CmdHelper.RunPowershellCommandAsync($"scoop update {appName}");
-            if (res.ToTrimmedLines().Last().Contains("was installed successfully!"))
-                return true;
-            return false;
+            return await CmdHelper.RunPowershellCommandAsync($"scoop update {appName}");
+        }
+
+        public static async Task<string> UpdateAllAsync()
+        {
+            return await CmdHelper.RunPowershellCommandAsync($"scoop update");
+        }
+
+        public static async Task<string> InstallAppAsync(string appName)
+        {
+            return await CmdHelper.RunPowershellCommandAsync($"scoop install {appName}");
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Scoop_Desktop"
         xmlns:ui="http://schemas.modernwpf.com/2019"
-        Title="Scoop GUI"
+        Title="Scoop Desktop"
         Width="800"
         Height="550"
         ui:WindowHelper.UseModernWindowStyle="True"

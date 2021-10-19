@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using ModernWpf;
 using System.Threading.Tasks;
 using ModernWpf.Controls;
+using System.Diagnostics;
 
 namespace Scoop_Desktop.Pages
 {
@@ -78,6 +79,20 @@ namespace Scoop_Desktop.Pages
         private void Install_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void ListViewHeader_Click(object sender, RoutedEventArgs e)
+        {
+            var header = e.OriginalSource as GridViewColumnHeader;
+            Debug.WriteLine(header.Column.Header);
+        }
+
+        private async void Update_Click(object sender, RoutedEventArgs e)
+        {
+            MyProgressRing.IsActive = true;
+            await ScoopHelper.UpdateAllAsync();
+            await ContentDialogHelper.Close("Scoop has been updated.");
+            MyProgressRing.IsActive = false;
         }
     }
 }

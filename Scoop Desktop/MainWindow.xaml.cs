@@ -1,15 +1,6 @@
-﻿using ModernWpf.Controls;
-using Scoop_Desktop.Models;
-using Scoop_Desktop.Pages;
+﻿using Scoop_Desktop.Pages;
 using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace Scoop_Desktop
 {
