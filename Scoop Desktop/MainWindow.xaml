@@ -43,7 +43,7 @@
                          x:FieldModifier="public"
                          IsActive="False" />
 
-        <ui:CommandBar Name="BottomBar" Grid.Row="1">
+        <ui:CommandBar Name="BottomBar" Grid.Row="1" Margin="0,0,0,0">
             <ui:AppBarButton Click="Refresh_Click" Icon="Refresh" Label="Refresh" />
             <ui:AppBarSeparator />
             <ui:AppBarButton Click="Update_Click" Icon="Sync" Label="Update" />
@@ -55,7 +55,26 @@
                     <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE838;" />
                 </ui:AppBarButton.Icon>
             </ui:AppBarButton>
-
+            <ui:CommandBar.Resources>
+                <BeginStoryboard x:Key="HideCommandBar">
+                    <Storyboard>
+                        <ThicknessAnimation Storyboard.TargetName="BottomBar"
+                                            Storyboard.TargetProperty="Margin"
+                                            From="0,0,0,0"
+                                            To="0,0,0,-40"
+                                            Duration="0:0:0.3" />
+                    </Storyboard>
+                </BeginStoryboard>
+                <BeginStoryboard x:Key="ShowCommandBar">
+                    <Storyboard>
+                        <ThicknessAnimation Storyboard.TargetName="BottomBar"
+                                            Storyboard.TargetProperty="Margin"
+                                            From="0,0,0,-40"
+                                            To="0,0,0,0"
+                                            Duration="0:0:0.3" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </ui:CommandBar.Resources>
         </ui:CommandBar>
     </Grid>
 </Window>

@@ -3,6 +3,7 @@ using Scoop_Desktop.Pages;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Animation;
 
 namespace Scoop_Desktop
 {
@@ -24,12 +25,24 @@ namespace Scoop_Desktop
 
             if (args.IsSettingsSelected)
             {
-                BottomBar.Visibility = Visibility.Collapsed;
+                if (BottomBar.Margin.Bottom == 0)
+                {
+                    var sb = BottomBar.FindResource("HideCommandBar") as BeginStoryboard;
+                    sb.Storyboard.Begin();
+                    sb.Storyboard.Completed += (obj, args) => BottomBar.Visibility = Visibility.Collapsed;
+                }
+
                 ContentFrame.Navigate(new Settings());
             }
             else
             {
-                BottomBar.Visibility = Visibility.Visible;
+                if (BottomBar.Margin.Bottom < 0)
+                {
+                    var sb = BottomBar.FindResource("ShowCommandBar") as BeginStoryboard;
+                    sb.Storyboard.Begin();
+                    BottomBar.Visibility = Visibility.Visible;
+                }
+
                 switch (header)
                 {
                     case "List":
@@ -87,7 +100,7 @@ namespace Scoop_Desktop
             ToggleProgressRing(true);
             var res = await ScoopHelper.ScoopCheckCacheAsync();
             ToggleProgressRing(false);
-            if(string.IsNullOrEmpty(res))
+            if (string.IsNullOrEmpty(res))
             {
                 await ContentDialogHelper.Close("No cache file found.");
                 return;
