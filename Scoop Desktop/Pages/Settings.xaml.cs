@@ -29,7 +29,7 @@ namespace Scoop_Desktop.Pages
         private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             var toggle = sender as ModernWpf.Controls.ToggleSwitch;
-            ThemeManager.Current.ApplicationTheme = toggle.IsOn ? ApplicationTheme.Dark : ApplicationTheme.Dark;
+            ThemeManager.Current.ApplicationTheme = toggle.IsOn ? ApplicationTheme.Dark : ApplicationTheme.Light;
         }
 
         private void ToggleAria2_Toggled(object sender, RoutedEventArgs e)
