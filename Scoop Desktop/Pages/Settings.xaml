@@ -1,13 +1,13 @@
 ﻿<Page x:Class="Scoop_Desktop.Pages.Settings"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Scoop_Desktop.Pages"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:ui="http://schemas.modernwpf.com/2019"
       Title="Settings"
-      d:DesignHeight="450"
       d:Background="White"
+      d:DesignHeight="450"
       d:DesignWidth="800"
       Loaded="Page_Loaded"
       mc:Ignorable="d">
@@ -31,20 +31,26 @@
         </Style>
     </Page.Resources>
 
-    <StackPanel Margin="20,10">
-        <TextBlock Style="{StaticResource Header}">Settings</TextBlock>
-        <TextBlock Style="{StaticResource Subheader}">Theme</TextBlock>
-        <ui:ToggleSwitch Toggled="ToggleSwitch_Toggled" OnContent="Dark" OffContent="Light">
-            Theme
-        </ui:ToggleSwitch>
-        <TextBlock Style="{StaticResource Subheader}">Scoop Configuration</TextBlock>
-        <ui:ToggleSwitch Name="useAria2Toggle" OnContent="On" OffContent="Off">
-            Use Aria2
-        </ui:ToggleSwitch>
-        <StackPanel Margin="0,15,0,0" Orientation="Horizontal">
-            <TextBlock Style="{StaticResource Label}">Proxy</TextBlock>
-            <TextBox Name="ProxyTextBox" Width="180" VerticalContentAlignment="Center" />
-            <Button Margin="10,0,0,0" Click="SetProxy_Click" Content="Apply" />
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="20,10">
+            <TextBlock Style="{StaticResource Header}">Settings</TextBlock>
+            <TextBlock Style="{StaticResource Subheader}">Theme</TextBlock>
+            <ui:ToggleSwitch Name="ToggleSwitchTheme"
+                             OffContent="Light"
+                             OnContent="Dark"
+                             Toggled="ToggleSwitch_Toggled">
+                Theme
+            </ui:ToggleSwitch>
+            <TextBlock Style="{StaticResource Subheader}">Scoop Configuration</TextBlock>
+            <ui:ToggleSwitch Name="useAria2Toggle" OffContent="Off" OnContent="On">
+                Use Aria2
+            </ui:ToggleSwitch>
+            <StackPanel Margin="0,15,0,0" Orientation="Horizontal">
+                <TextBlock Style="{StaticResource Label}">Proxy</TextBlock>
+                <TextBox Name="ProxyTextBox" Width="180" VerticalContentAlignment="Center" />
+                <Button Margin="10,0,0,0" Click="SetProxy_Click" Content="Apply" />
+            </StackPanel>
+            <Button Margin="0,15,0,0" Click="OpenScoopDirectory_Click" Content="Open Scoop Directory" />
         </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
 </Page>

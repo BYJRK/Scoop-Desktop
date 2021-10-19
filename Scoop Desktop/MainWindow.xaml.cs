@@ -1,14 +1,21 @@
-﻿using Scoop_Desktop.Pages;
+﻿using Scoop_Desktop.Interfaces;
+using Scoop_Desktop.Pages;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Scoop_Desktop
 {
     public partial class MainWindow : Window
     {
+        public static MainWindow Instance { get; private set; }
+
         public MainWindow()
         {
             InitializeComponent();
+
+            if (Instance is null)
+                Instance = this;
         }
 
         private void NavigationView_SelectionChanged(ModernWpf.Controls.NavigationView sender, ModernWpf.Controls.NavigationViewSelectionChangedEventArgs args)
@@ -17,20 +24,22 @@ namespace Scoop_Desktop
 
             if (args.IsSettingsSelected)
             {
+                BottomBar.Visibility = Visibility.Collapsed;
                 ContentFrame.Navigate(new Settings());
             }
             else
             {
+                BottomBar.Visibility = Visibility.Visible;
                 switch (header)
                 {
                     case "List":
-                        ContentFrame.Navigate(new ScoopList());
+                        ContentFrame.Navigate(ScoopList.Instance);
                         break;
-                    case "Update":
-                        ContentFrame.Navigate(new ScoopUpdate());
+                    case "Status":
+                        ContentFrame.Navigate(ScoopUpdate.Instance);
                         break;
                     case "Bucket":
-                        ContentFrame.Navigate(new ScoopBucket());
+                        ContentFrame.Navigate(ScoopBucket.Instance);
                         break;
                     default:
                         throw new NotImplementedException();
@@ -41,5 +50,57 @@ namespace Scoop_Desktop
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
         }
+
+        #region Public Methods
+
+        public void ToggleProgressRing(bool value)
+        {
+            MyProgressRing.IsActive = value;
+        }
+
+        public async Task RunTaskWithRingAsync(Task task)
+        {
+            MyProgressRing.IsActive = true;
+            await task;
+            MyProgressRing.IsActive = false;
+        }
+
+        #endregion
+
+        #region App Buttons
+
+        private async void Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            await RunTaskWithRingAsync((ContentFrame.Content as IPage).Update());
+        }
+
+        private async void Update_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleProgressRing(true);
+            await ScoopHelper.UpdateAllAsync();
+            await ContentDialogHelper.Close("Scoop has been updated.");
+            ToggleProgressRing(false);
+        }
+
+        private async void Cache_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleProgressRing(true);
+            var res = await ScoopHelper.ScoopCheckCacheAsync();
+            ToggleProgressRing(false);
+            if(string.IsNullOrEmpty(res))
+            {
+                await ContentDialogHelper.Close("No cache file found.");
+                return;
+            }
+            var opt = await ContentDialogHelper.YesNo(res, "Cache", yesText: "Remove All", noText: "Close");
+            if (opt == ModernWpf.Controls.ContentDialogResult.Primary)
+            {
+                await RunTaskWithRingAsync(ScoopHelper.ScoopRemoveCacheAsync());
+                await ContentDialogHelper.Close("All caches are removed.");
+            }
+        }
+
+        #endregion
+
     }
 }

@@ -2,6 +2,7 @@
 using Scoop_Desktop.UserControls;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -30,7 +31,6 @@ namespace Scoop_Desktop.Pages
         {
             var toggle = sender as ModernWpf.Controls.ToggleSwitch;
             ThemeManager.Current.ApplicationTheme = toggle.IsOn ? ApplicationTheme.Dark : ApplicationTheme.Dark;
-
         }
 
         private void ToggleAria2_Toggled(object sender, RoutedEventArgs e)
@@ -42,7 +42,10 @@ namespace Scoop_Desktop.Pages
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            MainWindow.Instance.ToggleProgressRing(true);
             this.Visibility = Visibility.Hidden;
+
+            ToggleSwitchTheme.IsOn = ThemeManager.Current.ApplicationTheme == ApplicationTheme.Dark;
 
             var aria2_enabled = await CmdHelper.RunPowershellCommandAsync("scoop config aria2-enabled");
             useAria2Toggle.IsOn = aria2_enabled.Contains("True");
@@ -56,6 +59,7 @@ namespace Scoop_Desktop.Pages
 
             useAria2Toggle.Toggled += ToggleAria2_Toggled;
             this.Visibility = Visibility.Visible;
+            MainWindow.Instance.ToggleProgressRing(false);
         }
 
         private async void SetProxy_Click(object sender, RoutedEventArgs e)
@@ -80,6 +84,11 @@ namespace Scoop_Desktop.Pages
             {
                 CmdHelper.RunPowershellCommand($"scoop config proxy {proxy}");
             }
+        }
+
+        private void OpenScoopDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("explorer.exe", ScoopHelper.ScoopRootDir);
         }
     }
 }

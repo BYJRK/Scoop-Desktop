@@ -1,18 +1,27 @@
 ﻿using Scoop_Desktop.Models;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using ModernWpf;
 using System.Threading.Tasks;
-using ModernWpf.Controls;
 using System.Diagnostics;
+using Scoop_Desktop.Interfaces;
 
 namespace Scoop_Desktop.Pages
 {
-    public partial class ScoopList : System.Windows.Controls.Page
+    public partial class ScoopList : Page, IPage
     {
+        private static ScoopList instance;
+        public static ScoopList Instance
+        {
+            get
+            {
+                if (instance is null)
+                    instance = new ScoopList();
+                return instance;
+            }
+        }
+
         public ScoopList()
         {
             InitializeComponent();
@@ -32,30 +41,23 @@ namespace Scoop_Desktop.Pages
             }
             else if (header == "Info")
             {
-                MyProgressRing.IsActive = true;
-                await ScoopHelper.ShowAppInfoAsync(app.Name, () => MyProgressRing.IsActive = false);
+                MainWindow.Instance.ToggleProgressRing(true);
+                await ScoopHelper.ShowAppInfoAsync(app.Name, () => MainWindow.Instance.ToggleProgressRing(false));
             }
             else if (header == "Uninstall")
             {
                 var result = await ContentDialogHelper.YesNo($"Are you sure you want to uninstall {app.Name}?", "Uninstall");
-                if (result == ContentDialogResult.Primary)
+                if (result == ModernWpf.Controls.ContentDialogResult.Primary)
                 {
-                    MyProgressRing.IsActive = true;
-                    await CmdHelper.RunPowershellCommandAsync($"scoop uninstall {app.Name}");
-                    MyProgressRing.IsActive = false;
+                    await MainWindow.Instance.RunTaskWithRingAsync(CmdHelper.RunPowershellCommandAsync($"scoop uninstall {app.Name}"));
                     await ContentDialogHelper.Close($"{app.Name} has been uninstalled.");
-                    MyProgressRing.IsActive = true;
-                    await RefreshAppList();
-                    MyProgressRing.IsActive = false;
+                    await MainWindow.Instance.RunTaskWithRingAsync(RefreshAppList());
                 }
             }
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            MyProgressRing.IsActive = true;
-            await RefreshAppList();
-            MyProgressRing.IsActive = false;
         }
 
         private async Task RefreshAppList()
@@ -69,30 +71,20 @@ namespace Scoop_Desktop.Pages
             }
         }
 
-        private async void Refresh_Click(object sender, RoutedEventArgs e)
-        {
-            MyProgressRing.IsActive = true;
-            await RefreshAppList();
-            MyProgressRing.IsActive = false;
-        }
-
-        private void Install_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void ListViewHeader_Click(object sender, RoutedEventArgs e)
         {
             var header = e.OriginalSource as GridViewColumnHeader;
             Debug.WriteLine(header.Column.Header);
         }
 
-        private async void Update_Click(object sender, RoutedEventArgs e)
+        public async Task Update()
         {
-            MyProgressRing.IsActive = true;
-            await ScoopHelper.UpdateAllAsync();
-            await ContentDialogHelper.Close("Scoop has been updated.");
-            MyProgressRing.IsActive = false;
+            await RefreshAppList();
+        }
+
+        private async void Page_Initialized(object sender, System.EventArgs e)
+        {
+            await MainWindow.Instance.RunTaskWithRingAsync(RefreshAppList());
         }
     }
 }

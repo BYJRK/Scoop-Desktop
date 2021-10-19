@@ -5,11 +5,23 @@ using System.Linq;
 using System.Windows;
 using Scoop_Desktop.Models;
 using System.Threading.Tasks;
+using Scoop_Desktop.Interfaces;
 
 namespace Scoop_Desktop.Pages
 {
-    public partial class ScoopUpdate : Page
+    public partial class ScoopUpdate : Page, IPage
     {
+        private static ScoopUpdate instance;
+        public static ScoopUpdate Instance
+        {
+            get
+            {
+                if (instance is null)
+                    instance = new ScoopUpdate();
+                return instance;
+            }
+        }
+
         public ScoopUpdate()
         {
             InitializeComponent();
@@ -21,14 +33,9 @@ namespace Scoop_Desktop.Pages
 
         public static ObservableCollection<AppInfo> AppList = new ObservableCollection<AppInfo>();
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            await RefreshAppStatus();
-        }
-
         private async Task RefreshAppStatus()
         {
-            MyProgressRing.IsActive = true;
+            MainWindow.Instance.ToggleProgressRing(true);
 
             var res = await ScoopHelper.GetAppStatusAsync();
             if (!res.Contains("Updates are available for:"))
@@ -44,7 +51,7 @@ namespace Scoop_Desktop.Pages
                 AppList.Add(new AppInfo { Name = split[0], Version = split[1] });
             }
 
-            MyProgressRing.IsActive = false;
+            MainWindow.Instance.ToggleProgressRing(false);
         }
 
         private async void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -59,9 +66,10 @@ namespace Scoop_Desktop.Pages
                     var option = await ContentDialogHelper.YesNo($"Are you sure you want to update {app.Name}?\n({app.Version})", $"Update");
                     if (option == ModernWpf.Controls.ContentDialogResult.Primary)
                     {
-                        MyProgressRing.IsActive = true;
+                        MainWindow.Instance.ToggleProgressRing(true);
                         var res = await ScoopHelper.UpdateAppAsync(app.Name);
-                        MyProgressRing.IsActive = false;
+                        MainWindow.Instance.ToggleProgressRing(false);
+
                         if (res.Contains("was installed successfully"))
                         {
                             await ContentDialogHelper.Close($"{app.Name} was updated successfully.");
@@ -78,6 +86,16 @@ namespace Scoop_Desktop.Pages
                     }
                     break;
             }
+        }
+
+        private async void Page_Initialized(object sender, EventArgs e)
+        {
+            await RefreshAppStatus();
+        }
+
+        public Task Update()
+        {
+            return RefreshAppStatus();
         }
     }
 }

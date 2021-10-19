@@ -20,39 +20,16 @@ namespace Scoop_Desktop
             }.ShowAsync();
         }
 
-        public static async Task<ContentDialogResult> YesNo(object content, string title = "", ContentDialogButton defaultButton = ContentDialogButton.Primary, DialogButtonPair pair = DialogButtonPair.OkCancel)
+        public static async Task<ContentDialogResult> YesNo(object content, string title = "", ContentDialogButton defaultButton = ContentDialogButton.Primary, string yesText = "Yes", string noText = "no")
         {
-            string yes;
-            string no;
-            switch (pair)
-            {
-                case DialogButtonPair.YesNo:
-                    yes = "Yes";
-                    no = "No";
-                    break;
-                case DialogButtonPair.OkCancel:
-                    yes = "OK";
-                    no = "Cancel";
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-
             return await new ContentDialog
             {
                 Title = title,
                 Content = content,
-                PrimaryButtonText = yes,
-                CloseButtonText = no,
+                PrimaryButtonText = yesText,
+                CloseButtonText = noText,
                 DefaultButton = ContentDialogButton.Primary
             }.ShowAsync();
-        }
-
-        public enum DialogButtonPair
-        {
-            YesNo,
-            OkCancel,
-            ConfirmAbort
         }
     }
 }

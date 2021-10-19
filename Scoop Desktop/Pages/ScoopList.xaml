@@ -9,7 +9,7 @@
       d:Background="White"
       d:DesignHeight="450"
       d:DesignWidth="800"
-      Loaded="Page_Loaded"
+      Initialized="Page_Initialized"
       mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -34,18 +34,5 @@
                 </ListView.View>
             </ListView>
         </Border>
-        <ui:ProgressRing Name="MyProgressRing"
-                         Width="50"
-                         Height="50"
-                         IsActive="True" />
-        <ui:CommandBar Grid.Row="1">
-            <ui:AppBarButton Click="Refresh_Click" Icon="Refresh" Label="Refresh" />
-            <ui:AppBarButton Click="Update_Click" Icon="Sync" Label="Update" />
-            <!--<ui:AppBarSeparator />
-            <ui:AppBarButton Label="Install"
-                             Icon="Download"
-                             Click="Install_Click"
-                             IsEnabled="False" />-->
-        </ui:CommandBar>
     </Grid>
 </Page>
