@@ -1,5 +1,4 @@
 ﻿using ModernWpf;
-using Scoop_Desktop.UserControls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -68,21 +67,21 @@ namespace Scoop_Desktop.Pages
 
             if (string.IsNullOrEmpty(proxy))
             {
-                CmdHelper.RunPowershellCommand($"scoop config rm proxy");
+                await CmdHelper.RunPowershellCommandAsync($"scoop config rm proxy");
             }
-            else if (!Regex.IsMatch(proxy, @"(?:\d{1,3}(?(?=:)|\.)){4}:\d{1,5}"))
-            {
-                await new ModernWpf.Controls.ContentDialog
-                {
-                    Title = "Proxy",
-                    Content = "Invalid proxy value.",
-                    CloseButtonText = "Close",
-                    DefaultButton = ModernWpf.Controls.ContentDialogButton.Close
-                }.ShowAsync();
-            }
+            //else if (!Regex.IsMatch(proxy, @"(?:\d{1,3}(?(?=:)|\.)){4}:\d{1,5}"))
+            //{
+            //    await new ModernWpf.Controls.ContentDialog
+            //    {
+            //        Title = "Proxy",
+            //        Content = "Invalid proxy value.",
+            //        CloseButtonText = "Close",
+            //        DefaultButton = ModernWpf.Controls.ContentDialogButton.Close
+            //    }.ShowAsync();
+            //}
             else
             {
-                CmdHelper.RunPowershellCommand($"scoop config proxy {proxy}");
+                await CmdHelper.RunPowershellCommandAsync($"scoop config proxy {proxy}");
             }
         }
 
