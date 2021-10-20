@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Scoop_Desktop.Interfaces;
+using System.IO;
 
 namespace Scoop_Desktop.Pages
 {
@@ -35,7 +36,7 @@ namespace Scoop_Desktop.Pages
             var header = (sender as MenuItem)?.Header.ToString();
             var app = MyListView.SelectedItem as AppInfo;
 
-            if (header == "Home")
+            if (header == "Home Page")
             {
                 await CmdHelper.RunPowershellCommandAsync($"scoop home {app.Name}");
             }
@@ -43,6 +44,16 @@ namespace Scoop_Desktop.Pages
             {
                 MainWindow.Instance.ToggleProgressRing(true);
                 await ScoopHelper.ShowAppInfoAsync(app.Name, () => MainWindow.Instance.ToggleProgressRing(false));
+            }
+            else if (header == "Show in Explorer")
+            {
+                var folderPath = Path.Combine(ScoopHelper.ScoopRootDir, "apps", app.Name);
+                if (!Directory.Exists(folderPath))
+                {
+                    await ContentDialogHelper.Close($"Cannot find {app.Name}'s directory.");
+                }
+                else
+                    Process.Start("explorer.exe", folderPath);
             }
             else if (header == "Uninstall")
             {
@@ -54,10 +65,6 @@ namespace Scoop_Desktop.Pages
                     await MainWindow.Instance.RunTaskWithRingAsync(RefreshAppList());
                 }
             }
-        }
-
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
-        {
         }
 
         private async Task RefreshAppList()

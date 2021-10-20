@@ -1,6 +1,7 @@
 ﻿using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -48,14 +49,14 @@ namespace Scoop_Desktop
             return await CmdHelper.RunPowershellCommandAsync("scoop status");
         }
 
-        public static async Task<string> UpdateAppAsync(string appName)
+        public static async Task UpdateAppAsync(string appName, DataReceivedEventHandler callback = null)
         {
-            return await CmdHelper.RunPowershellCommandAsync($"scoop update {appName}");
+            await CmdHelper.RunPowershellCommandAsync($"scoop update {appName}", callback);
         }
 
-        public static async Task<string> UpdateAllAsync()
+        public static async Task UpdateAllAsync(DataReceivedEventHandler callback = null)
         {
-            return await CmdHelper.RunPowershellCommandAsync($"scoop update");
+            await CmdHelper.RunPowershellCommandAsync($"scoop update", callback);
         }
 
         public static async Task<string> InstallAppAsync(string appName)

@@ -40,7 +40,7 @@ namespace Scoop_Desktop.Pages
             var res = await ScoopHelper.GetAppStatusAsync();
             if (!res.Contains("Updates are available for:"))
             {
-                // 所有应用都是最新的
+                // all apps are in the newest version
                 return;
             }
 
@@ -63,28 +63,84 @@ namespace Scoop_Desktop.Pages
             switch (item.Header.ToString())
             {
                 case "Update":
-                    var option = await ContentDialogHelper.YesNo($"Are you sure you want to update {app.Name}?\n({app.Version})", $"Update");
-                    if (option == ModernWpf.Controls.ContentDialogResult.Primary)
-                    {
-                        MainWindow.Instance.ToggleProgressRing(true);
-                        var res = await ScoopHelper.UpdateAppAsync(app.Name);
-                        MainWindow.Instance.ToggleProgressRing(false);
-
-                        if (res.Contains("was installed successfully"))
-                        {
-                            await ContentDialogHelper.Close($"{app.Name} was updated successfully.");
-                            await RefreshAppStatus();
-                        }
-                        else if (res.Contains("ERROR Application is still running"))
-                        {
-                            await ContentDialogHelper.Close("Update failed. Application is still running.");
-                        }
-                        else
-                        {
-                            await ContentDialogHelper.Close("Update failed.\n" + res);
-                        }
-                    }
+                    await UpdateAppAsync(app);
                     break;
+            }
+        }
+
+        private async Task UpdateAppAsync(AppInfo app)
+        {
+            var option = await ContentDialogHelper.YesNo($"Are you sure you want to update {app.Name}?\n({app.Version})",
+                "Update",
+                defaultButton: ModernWpf.Controls.ContentDialogButton.Close);
+
+            if (option != ModernWpf.Controls.ContentDialogResult.Primary)
+                return;
+
+            bool succeed = false;
+
+            var dialog = new ModernWpf.Controls.ContentDialog
+            {
+                Title = "Scoop Update",
+                DefaultButton = ModernWpf.Controls.ContentDialogButton.Close,
+                Content = ""
+            };
+            dialog.Loaded += async (obj, args) =>
+            {
+                await ScoopHelper.UpdateAppAsync(app.Name, (obj, args) =>
+                {
+                    var usefulLines = new string[]
+                    {
+                        "Updating", "Downloading", "Uninstalling", "Installing"
+                    };
+                    var text = args.Data?.ToString().Trim();
+
+                    if (string.IsNullOrEmpty(text))
+                        return;
+
+                    if (text.EndsWith("was installed successfully!"))
+                    {
+                        succeed = true;
+                        return;
+                    }
+                    else if (usefulLines.Any(word => text.StartsWith(word)))
+                    {
+                        dialog.Dispatcher.Invoke(() =>
+                        {
+                            dialog.Content += text + "\n";
+                        });
+                    }
+                    else if (text.ToLower().Contains("error"))
+                    {
+                        dialog.Dispatcher.Invoke(() =>
+                        {
+                            dialog.Content += text;
+                        });
+                        return;
+                    }
+                });
+
+                if (succeed)
+                {
+                    dialog.Content += $"{app.Name} was updated successfully!";
+                    dialog.CloseButtonText = "Done";
+                }
+                else
+                {
+                    dialog.Content += "Update failed. Try again?";
+                    dialog.PrimaryButtonText = "Yes";
+                    dialog.CloseButtonText = "No";
+                }
+            };
+
+            var opt = await dialog.ShowAsync();
+            if (opt == ModernWpf.Controls.ContentDialogResult.Primary)
+            {
+                await UpdateAppAsync(app);
+            }
+            else if(succeed)
+            {
+                await RefreshAppStatus();
             }
         }
 

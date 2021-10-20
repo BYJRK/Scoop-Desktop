@@ -20,8 +20,10 @@
             <ListView Name="MyListView" GridViewColumnHeader.Click="ListViewHeader_Click">
                 <ListView.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Click="MenuItem_RightClick" Header="Home" />
+                        <MenuItem Click="MenuItem_RightClick" Header="Home Page" />
                         <MenuItem Click="MenuItem_RightClick" Header="Info" />
+                        <MenuItem Click="MenuItem_RightClick" Header="Show in Explorer" />
+                        <Separator />
                         <MenuItem Click="MenuItem_RightClick" Header="Uninstall" />
                     </ContextMenu>
                 </ListView.ContextMenu>

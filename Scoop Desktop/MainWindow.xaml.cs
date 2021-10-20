@@ -1,8 +1,10 @@
 ﻿using Scoop_Desktop.Interfaces;
 using Scoop_Desktop.Pages;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
 namespace Scoop_Desktop
@@ -89,10 +91,33 @@ namespace Scoop_Desktop
 
         private async void Update_Click(object sender, RoutedEventArgs e)
         {
-            ToggleProgressRing(true);
-            await ScoopHelper.UpdateAllAsync();
-            await ContentDialogHelper.Close("Scoop has been updated.");
-            ToggleProgressRing(false);
+            var dialog = new ModernWpf.Controls.ContentDialog
+            {
+                Title = "Scoop Update",
+                DefaultButton = ModernWpf.Controls.ContentDialogButton.Close,
+                Content = ""
+            };
+            dialog.Loaded += async (obj, args) =>
+            {
+                await ScoopHelper.UpdateAllAsync((obj, args) =>
+                {
+                    var text = args.Data?.ToString().Trim();
+                    if (string.IsNullOrEmpty(text))
+                        return;
+                    if (text.StartsWith("Updating"))
+                    {
+                        dialog.Dispatcher.Invoke(() =>
+                        {
+                            if (dialog.Content.ToString().Length > 0)
+                                dialog.Content += "\n";
+                            dialog.Content += text;
+                        });
+                    }
+                });
+                dialog.Content += "\nScoop was updated successfully!";
+                dialog.CloseButtonText = "Done";
+            };
+            await dialog.ShowAsync();
         }
 
         private async void Cache_Click(object sender, RoutedEventArgs e)
