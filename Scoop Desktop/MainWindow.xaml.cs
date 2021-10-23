@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using System.Configuration;
 
 namespace Scoop_Desktop
 {
@@ -19,6 +20,10 @@ namespace Scoop_Desktop
 
             if (Instance is null)
                 Instance = this;
+
+            // load app.config
+            bool darkmode = bool.Parse(ConfigurationManager.AppSettings["DarkMode"]);
+            Settings.SetTheme(darkmode, false);
         }
 
         private void NavigationView_SelectionChanged(ModernWpf.Controls.NavigationView sender, ModernWpf.Controls.NavigationViewSelectionChangedEventArgs args)

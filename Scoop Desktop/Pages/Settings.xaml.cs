@@ -1,18 +1,8 @@
 ﻿using ModernWpf;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Configuration;
 
 namespace Scoop_Desktop.Pages
 {
@@ -29,7 +19,21 @@ namespace Scoop_Desktop.Pages
         private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             var toggle = sender as ModernWpf.Controls.ToggleSwitch;
-            ThemeManager.Current.ApplicationTheme = toggle.IsOn ? ApplicationTheme.Dark : ApplicationTheme.Light;
+            SetTheme(toggle.IsOn);
+        }
+
+        public static void SetTheme(bool darkmode, bool saveSetting = true)
+        {
+            if (darkmode)
+                ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
+            else
+                ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
+            if (saveSetting)
+            {
+                var cfa = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                cfa.AppSettings.Settings["DarkMode"].Value = darkmode.ToString();
+                cfa.Save();
+            }
         }
 
         private void ToggleAria2_Toggled(object sender, RoutedEventArgs e)
