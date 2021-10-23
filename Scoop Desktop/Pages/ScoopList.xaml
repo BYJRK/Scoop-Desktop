@@ -17,7 +17,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Border Margin="5" BorderBrush="Gray" BorderThickness="1">
-            <ListView Name="MyListView" GridViewColumnHeader.Click="ListViewHeader_Click">
+            <ListView Name="MyListView" x:FieldModifier="public" GridViewColumnHeader.Click="ListViewHeader_Click">
                 <ListView.ContextMenu>
                     <ContextMenu>
                         <MenuItem Click="MenuItem_RightClick" Header="Home Page" />
@@ -29,9 +29,16 @@
                 </ListView.ContextMenu>
                 <ListView.View>
                     <GridView AllowsColumnReorder="True">
-                        <GridViewColumn Width="250" DisplayMemberBinding="{Binding Name}" Header="Name" />
-                        <GridViewColumn Width="200" DisplayMemberBinding="{Binding Version}" Header="Version" />
+                        <GridViewColumn Width="250" Header="Name" DisplayMemberBinding="{Binding Name}" />
                         <GridViewColumn Width="150" DisplayMemberBinding="{Binding Bucket}" Header="Bucket" />
+                        <GridViewColumn Width="150" DisplayMemberBinding="{Binding Version}" Header="Version" />
+                        <GridViewColumn Width="150" Header="New">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Name="Txt" Text="{Binding NewVersion}" Foreground="Green" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>

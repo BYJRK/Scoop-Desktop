@@ -21,9 +21,6 @@ namespace Scoop_Desktop
             if (Instance is null)
                 Instance = this;
 
-            // load app.config
-            bool darkmode = bool.Parse(ConfigurationManager.AppSettings["DarkMode"]);
-            Settings.SetTheme(darkmode, false);
         }
 
         private void NavigationView_SelectionChanged(ModernWpf.Controls.NavigationView sender, ModernWpf.Controls.NavigationViewSelectionChangedEventArgs args)
@@ -69,6 +66,9 @@ namespace Scoop_Desktop
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            // load app.config
+            bool darkmode = bool.Parse(ConfigurationManager.AppSettings["DarkMode"]);
+            Settings.SetTheme(darkmode, false);
         }
 
         #region Public Methods

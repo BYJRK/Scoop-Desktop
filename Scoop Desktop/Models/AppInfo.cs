@@ -11,6 +11,7 @@ namespace Scoop_Desktop.Models
         public string Name { get; set; }
         public string Version { get; set; }
         public string Bucket { get; set; }
+        public string NewVersion { get; set; }
         public AppInfo(string scoopInfo)
         {
             var split = scoopInfo.Split();

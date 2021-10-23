@@ -6,6 +6,7 @@ using System.Windows;
 using Scoop_Desktop.Models;
 using System.Threading.Tasks;
 using Scoop_Desktop.Interfaces;
+using System.Windows.Data;
 
 namespace Scoop_Desktop.Pages
 {
@@ -48,8 +49,12 @@ namespace Scoop_Desktop.Pages
             foreach (var line in res.ToTrimmedLines().Where(line => line.Contains("->")))
             {
                 var split = line.Split(": ");
-                AppList.Add(new AppInfo { Name = split[0], Version = split[1] });
+                var name = split[0];
+                var newVersion = split[1].Split(" -> ")[1];
+                AppList.Add(new AppInfo { Name = name, Version = split[1] });
+                ScoopList.AppList.First(app => app.Name == name).NewVersion = newVersion;
             }
+            ScoopList.Instance.MyListView.Items.Refresh();            
 
             MainWindow.Instance.ToggleProgressRing(false);
         }
@@ -138,7 +143,7 @@ namespace Scoop_Desktop.Pages
             {
                 await UpdateAppAsync(app);
             }
-            else if(succeed)
+            else if (succeed)
             {
                 await RefreshAppStatus();
             }
