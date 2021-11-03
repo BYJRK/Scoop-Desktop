@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace Scoop_Desktop.Interfaces
+namespace ScoopDesktop.Interfaces
 {
     interface IPage
     {

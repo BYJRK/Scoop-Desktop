@@ -1,5 +1,5 @@
-﻿using Scoop_Desktop.Interfaces;
-using Scoop_Desktop.Pages;
+﻿using ScoopDesktop.Interfaces;
+using ScoopDesktop.Pages;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Configuration;
 
-namespace Scoop_Desktop
+namespace ScoopDesktop
 {
     public partial class MainWindow : Window
     {

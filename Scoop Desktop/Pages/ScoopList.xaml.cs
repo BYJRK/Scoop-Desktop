@@ -1,14 +1,14 @@
-﻿using Scoop_Desktop.Models;
+﻿using ScoopDesktop.Models;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using Scoop_Desktop.Interfaces;
+using ScoopDesktop.Interfaces;
 using System.IO;
 
-namespace Scoop_Desktop.Pages
+namespace ScoopDesktop.Pages
 {
     public partial class ScoopList : Page, IPage
     {

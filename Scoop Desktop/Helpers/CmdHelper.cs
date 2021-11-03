@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-namespace Scoop_Desktop
+namespace ScoopDesktop
 {
     static class CmdHelper
     {

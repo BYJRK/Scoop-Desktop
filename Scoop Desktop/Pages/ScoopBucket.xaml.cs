@@ -1,4 +1,4 @@
-﻿using Scoop_Desktop.Interfaces;
+﻿using ScoopDesktop.Interfaces;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace Scoop_Desktop.Pages
+namespace ScoopDesktop.Pages
 {
     /// <summary>
     /// ScoopBucket.xaml 的交互逻辑

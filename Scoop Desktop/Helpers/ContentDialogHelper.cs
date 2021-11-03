@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using ModernWpf;
 using ModernWpf.Controls;
 
-namespace Scoop_Desktop
+namespace ScoopDesktop
 {
     class ContentDialogHelper
     {

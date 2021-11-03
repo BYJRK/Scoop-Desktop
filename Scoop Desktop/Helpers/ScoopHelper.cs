@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Scoop_Desktop
+namespace ScoopDesktop
 {
     class ScoopHelper
     {

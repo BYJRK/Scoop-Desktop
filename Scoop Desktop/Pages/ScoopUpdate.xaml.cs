@@ -3,12 +3,12 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using Scoop_Desktop.Models;
+using ScoopDesktop.Models;
 using System.Threading.Tasks;
-using Scoop_Desktop.Interfaces;
+using ScoopDesktop.Interfaces;
 using System.Windows.Data;
 
-namespace Scoop_Desktop.Pages
+namespace ScoopDesktop.Pages
 {
     public partial class ScoopUpdate : Page, IPage
     {

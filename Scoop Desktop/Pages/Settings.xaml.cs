@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Configuration;
 
-namespace Scoop_Desktop.Pages
+namespace ScoopDesktop.Pages
 {
     /// <summary>
     /// Settings.xaml 的交互逻辑

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>Scoop_Desktop</RootNamespace>
+    <RootNamespace>ScoopDesktop</RootNamespace>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Icons\Spoon.ico</ApplicationIcon>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>    
